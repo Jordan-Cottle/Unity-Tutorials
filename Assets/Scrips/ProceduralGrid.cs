@@ -13,7 +13,8 @@ public class ProceduralGrid : MonoBehaviour
     // Grid settings
     public float cellSize = 1;
     public Vector3 gridOffset;
-    public int gridSize = 1;
+    public int gridWidth = 1;
+    public int gridHeight = 1;
 
     void Awake()
     {
@@ -21,33 +22,52 @@ public class ProceduralGrid : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    void Update()
     {
-        MakeProceduralGrid();
+        MakeDiscreteProceduralGrid();
         UpdateMesh();
     }
 
-    void MakeProceduralGrid()
+    void MakeDiscreteProceduralGrid()
     {
         // Initialize arrays
-        vertices = new Vector3[4 * (gridSize * gridSize)];
-        triangles = new int[6 * gridSize];
+        int numCells = gridWidth * gridHeight;
+        vertices = new Vector3[4 * numCells];
+        triangles = new int[6 * numCells];
 
         // Set vertex offsets
         float vertexOffset = cellSize * 0.5f;
 
         // Populate arrays
-        vertices[0] = new Vector3(-vertexOffset, 0, -vertexOffset) + gridOffset;
-        vertices[1] = new Vector3(-vertexOffset, 0, vertexOffset) + gridOffset;
-        vertices[2] = new Vector3(vertexOffset, 0, -vertexOffset) + gridOffset;
-        vertices[3] = new Vector3(vertexOffset, 0, vertexOffset) + gridOffset;
 
-        triangles[0] = 0;
-        triangles[1] = 1;
-        triangles[2] = 2;
-        triangles[3] = 2;
-        triangles[4] = 1;
-        triangles[5] = 3;
+        int vertex = 0;
+        int triangle = 0;
+
+        Vector3 cellOffset;
+        for (int x = 0; x < gridWidth; x++)
+        {
+            for (int y = 0; y < gridHeight; y++)
+            {
+                cellOffset = new Vector3(x * cellSize, 0, y * cellSize) + gridOffset;
+
+                int height = x + y;
+                vertices[vertex] = new Vector3(-vertexOffset, height, -vertexOffset) + cellOffset;
+                vertices[vertex + 1] = new Vector3(-vertexOffset, height, vertexOffset) + cellOffset;
+                vertices[vertex + 2] = new Vector3(vertexOffset, height, -vertexOffset) + cellOffset;
+                vertices[vertex + 3] = new Vector3(vertexOffset, height, vertexOffset) + cellOffset;
+
+                triangles[triangle] = vertex;
+                triangles[triangle + 1] = vertex + 1;
+                triangles[triangle + 2] = vertex + 2;
+                triangles[triangle + 3] = vertex + 2;
+                triangles[triangle + 4] = vertex + 1;
+                triangles[triangle + 5] = vertex + 3;
+
+                vertex += 4;
+                triangle += 6;
+            }
+        }
+
     }
 
     void UpdateMesh()
@@ -58,11 +78,4 @@ public class ProceduralGrid : MonoBehaviour
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
     }
-
-    void Update()
-    {
-        MakeProceduralGrid();
-        UpdateMesh();
-    }
-
 }
