@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-public class ProceduralGrid : MonoBehaviour
+public class DiscreteGrid : MonoBehaviour
 {
 
     Mesh mesh;
@@ -15,6 +15,8 @@ public class ProceduralGrid : MonoBehaviour
     public Vector3 gridOffset;
     public int gridWidth = 1;
     public int gridHeight = 1;
+
+    public float gridSlope = 0.0f;
 
     void Awake()
     {
@@ -50,7 +52,7 @@ public class ProceduralGrid : MonoBehaviour
             {
                 cellOffset = new Vector3(x * cellSize, 0, y * cellSize) + gridOffset;
 
-                int height = x + y;
+                float height = (x + y) * gridSlope;
                 vertices[vertex] = new Vector3(-vertexOffset, height, -vertexOffset) + cellOffset;
                 vertices[vertex + 1] = new Vector3(-vertexOffset, height, vertexOffset) + cellOffset;
                 vertices[vertex + 2] = new Vector3(vertexOffset, height, -vertexOffset) + cellOffset;
@@ -67,7 +69,6 @@ public class ProceduralGrid : MonoBehaviour
                 triangle += 6;
             }
         }
-
     }
 
     void UpdateMesh()
