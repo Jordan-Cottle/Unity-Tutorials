@@ -48,7 +48,7 @@ public class CubeData : MonoBehaviour
         Vector3[] faceValues = new Vector3[4];
         for (int i = 0; i < faceValues.Length; i++)
         {
-            faceValues[i] = (vertices[faceTriangles[face][i]] * size) + offset;
+            faceValues[i] = (vertices[faceTriangles[face][i]] + offset) * size;
         }
 
         return faceValues;
