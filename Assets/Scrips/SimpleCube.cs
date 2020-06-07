@@ -13,6 +13,7 @@ public class SimpleCube : MonoBehaviour
     private List<Color> colors;
 
     public float size = 1;
+    public Vector3 position = new Vector3(0, 0, 0);
 
     void Awake()
     {
@@ -64,7 +65,7 @@ public class SimpleCube : MonoBehaviour
         triangles.Add(vCount + 2);
         triangles.Add(vCount + 3);
 
-        vertices.AddRange(CubeData.FaceVertices(face, size));
+        vertices.AddRange(CubeData.FaceVertices(face, position, size));
     }
     void UpdateMesh()
     {
