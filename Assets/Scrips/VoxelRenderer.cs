@@ -22,7 +22,7 @@ public class VoxelRenderer : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Update()
+    void Start()
     {
         colors = new List<Color>();
         vertices = new List<Vector3>();
