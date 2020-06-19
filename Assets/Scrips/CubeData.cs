@@ -33,7 +33,7 @@ public class CubeData : MonoBehaviour
        new int [] {6, 5, 4, 7},
     };
 
-    public static Vector3[] FaceVertices(int face, float size = 1)
+    public static Vector3[] faceVertices(int face, float size = 1)
     {
         Vector3[] faceValues = new Vector3[4];
         for (int i = 0; i < faceValues.Length; i++)
@@ -43,7 +43,7 @@ public class CubeData : MonoBehaviour
 
         return faceValues;
     }
-    public static Vector3[] FaceVertices(int face, Vector3 offset, float size = 1)
+    public static Vector3[] faceVertices(int face, Vector3 offset, float size = 1)
     {
         Vector3[] faceValues = new Vector3[4];
         for (int i = 0; i < faceValues.Length; i++)
@@ -52,6 +52,11 @@ public class CubeData : MonoBehaviour
         }
 
         return faceValues;
+    }
+
+    public static Vector3[] faceVertices(Direction dir, Vector3 offset, float size = 1)
+    {
+        return faceVertices((int) dir, offset, size);
     }
 
     void Update()

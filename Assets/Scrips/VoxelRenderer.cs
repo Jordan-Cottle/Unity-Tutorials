@@ -36,29 +36,37 @@ public class VoxelRenderer : MonoBehaviour
     {
         for (int x = 0; x < VoxelData.Width; x++)
         {
-            for (int z = 0; z < VoxelData.Depth; z++)
-            {
-                if (VoxelData.GetCell(x, z) == 0)
+            for(int y = 0; y < VoxelData.Height; y++){
+                for (int z = 0; z < VoxelData.Depth; z++)
                 {
-                    continue;
-                }
+                    if (VoxelData.GetCell(x, y, z) == 0)
+                    {
+                        continue;
+                    }
 
-                MakeCube(new Vector3(x, 0, z));
+                    MakeCube(new Vector3(x, y, z));
+                }
             }
         }
     }
 
     void MakeCube(Vector3 position)
     {
-        for (int i = 0; i < 6; i++)
-        {
-            MakeFace(i, position);
-        }
-
+        MakeFace(Direction.Up, position);
+        MakeFace(Direction.Down, position);
+        MakeFace(Direction.North, position);
+        MakeFace(Direction.South, position);
+        MakeFace(Direction.East, position);
+        MakeFace(Direction.West, position);
     }
 
-    void MakeFace(int face, Vector3 position)
+    void MakeFace(Direction dir, Vector3 position)
     {
+        if (VoxelData.GetNeighbor(position, dir) != 0){
+                Debug.Log("Skipping face " + dir);
+                return;
+        }
+
         int vCount = vertices.Count;
 
         triangles.Add(vCount + 0);
@@ -68,10 +76,9 @@ public class VoxelRenderer : MonoBehaviour
         triangles.Add(vCount + 2);
         triangles.Add(vCount + 3);
 
-        Vector3[] newVertices = CubeData.FaceVertices(face, position + offset, size);
+        Vector3[] newVertices = CubeData.faceVertices(dir, position + offset, size);
         vertices.AddRange(newVertices);
 
-        Debug.Log(newVertices.Length);
         for (int i = 0; i < newVertices.Length; i++)
         {
             colors.Add(

@@ -65,7 +65,7 @@ public class SimpleCube : MonoBehaviour
         triangles.Add(vCount + 2);
         triangles.Add(vCount + 3);
 
-        vertices.AddRange(CubeData.FaceVertices(face, position, size));
+        vertices.AddRange(CubeData.faceVertices(face, position, size));
     }
     void UpdateMesh()
     {
