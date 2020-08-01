@@ -18,12 +18,17 @@ public class City : MonoBehaviour
     public static readonly int HOUSE = 1;
     public static readonly int FACTORY = 2;
 
+    private UIController uIController;
+
     // Start is called before the first frame update
     void Start()
     {
         Cash = 10000;
-        Food = 6;
-        JobsCeiling = 10;
+
+        uIController = GetComponent<UIController>();
+
+        // Start on Day 1
+        EndTurn();
     }
 
     public void EndTurn()
@@ -31,8 +36,11 @@ public class City : MonoBehaviour
         Day++;
         CalculateJobs();
         CalculateFood();
-        CalculateCash();
+        Cash += CalculateCash();
         CalculatePopulation();
+
+        uIController.UpdateDayCount();
+        uIController.UpdateCityData();
     }
 
     void CalculateJobs()
@@ -41,9 +49,9 @@ public class City : MonoBehaviour
         JobsCurrent = Mathf.Min(PopulationCurrent, JobsCeiling);
     }
 
-    void CalculateCash()
+    public int CalculateCash()
     {
-        Cash += JobsCurrent * 2;
+        return JobsCurrent * 2;
     }
 
     void CalculateFood()
